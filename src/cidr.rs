@@ -30,7 +30,7 @@ impl Ipv4Cidr {
         }
     }
 
-    pub fn len(&self) -> u8 {
+    pub fn prefix_len(&self) -> u8 {
         self.len
     }
 
@@ -40,10 +40,8 @@ impl Ipv4Cidr {
 
     pub fn max(&self) -> Ipv4Addr {
         let bits = u32::from(self.addr);
-        let mask = get_cidr_mask(self.len).expect(&format!(
-            "{} should always be lower than or equal to 32",
-            self.len
-        ));
+        let mask = get_cidr_mask(self.len)
+            .unwrap_or_else(|_| panic!("{} should always be lower than or equal to 32", self.len));
         let reversed_mask = u32::MAX ^ mask;
 
         let max_bits = bits | reversed_mask;
@@ -177,7 +175,7 @@ mod tests {
 
         for (addr, len) in test_cases {
             let cidr = Ipv4Cidr::new(addr, len).unwrap();
-            let actual = cidr.len();
+            let actual = cidr.prefix_len();
             assert_eq!(actual, len, "we expect {actual} to equal {len}");
         }
     }

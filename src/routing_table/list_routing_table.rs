@@ -1,6 +1,7 @@
 use crate::{Ipv4Cidr, RoutingTable};
 use std::net::Ipv4Addr;
 
+#[derive(Default)]
 pub struct ListRoutingTable {
     cidrs: Vec<Ipv4Cidr>,
 }
@@ -25,7 +26,7 @@ impl RoutingTable for ListRoutingTable {
             if cidr.contains(addr) {
                 match acc {
                     None => Some(*cidr),
-                    Some(other) if other.len() < cidr.len() => Some(*cidr),
+                    Some(other) if other.prefix_len() < cidr.prefix_len() => Some(*cidr),
                     Some(_) => acc,
                 }
             } else {

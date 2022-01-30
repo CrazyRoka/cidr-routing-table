@@ -1,8 +1,7 @@
-use crate::{utils::cut_addr, Ipv4Cidr};
+use crate::{utils::cut_addr, Ipv4Cidr, RoutingTable};
 use std::{collections::HashSet, net::Ipv4Addr};
 
-use crate::RoutingTable;
-
+#[derive(Default)]
 pub struct HashRoutingTable {
     cidrs: HashSet<Ipv4Cidr>,
 }

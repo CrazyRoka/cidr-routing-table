@@ -1,7 +1,9 @@
 use cidr_routing_table::{
     get_cidr_mask, HashRoutingTable, Ipv4Cidr, ListRoutingTable, RoutingTable,
 };
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{
+    criterion_group, criterion_main, AxisScale, BenchmarkId, Criterion, PlotConfiguration,
+};
 use rand::prelude::*;
 use std::{iter::repeat_with, net::Ipv4Addr};
 
@@ -14,9 +16,11 @@ fn generate_cidr(bits: u32, len: u8) -> Ipv4Cidr {
 }
 
 fn bench_routing_table(c: &mut Criterion) {
+    let plot_config = PlotConfiguration::default().summary_scale(AxisScale::Logarithmic);
+    let sizes = [10, 100, 1000, 10000, 100000, 1000000];
     let mut rng = rand::thread_rng();
     let mut group = c.benchmark_group("CidrManager");
-    let sizes = [10, 100, 1000, 10000, 1000000];
+    group.plot_config(plot_config);
 
     for size in sizes {
         let cidrs = repeat_with(|| generate_cidr(rng.gen(), rng.gen_range(0..=32))).take(size);
