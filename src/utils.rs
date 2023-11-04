@@ -20,10 +20,14 @@ pub fn cut_addr(addr: Ipv4Addr, len: u8) -> Result<Ipv4Addr, NetworkParseError> 
         Err(NetworkParseError::NetworkLengthError)
     } else {
         let right_len = MAX_LENGTH - len;
-        let bits = u32::from(addr) as u64;
-        let new_bits = (bits >> right_len) << right_len;
+        let bits = u32::from(addr);
+        let new_bits = if right_len == MAX_LENGTH {
+            0
+        } else {
+            (bits >> right_len) << right_len
+        };
 
-        Ok(Ipv4Addr::from(new_bits as u32))
+        Ok(Ipv4Addr::from(new_bits))
     }
 }
 

@@ -34,16 +34,25 @@ impl RoutingTable for ListRoutingTable {
             }
         })
     }
+
+    fn size(&self) -> usize {
+        self.cidrs.len()
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::ListRoutingTable;
-    use crate::routing_table::tests::{complex_test, empty_test, simple_test};
+    use crate::routing_table::tests::{complex_test, empty_test, simple_test, one_global_cidr};
 
     #[test]
     fn test_list_empty_case() {
         empty_test(Box::new(ListRoutingTable::new()));
+    }
+
+    #[test]
+    fn test_one_global_cidr() {
+        one_global_cidr(Box::new(ListRoutingTable::new()));
     }
 
     #[test]

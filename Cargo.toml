@@ -8,8 +8,18 @@ edition = "2021"
 [dependencies]
 
 [dev-dependencies]
-criterion = "0.3"
+criterion = { version = "0.4", features = ["html_reports"] }
 rand = "0.8.4"
+mimalloc = { version = "*", features = ["default"] }
+
+[build]
+rustflags = ["-C", "target-cpu=native"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
 
 [[bench]]
 name = "routing_table_bench"

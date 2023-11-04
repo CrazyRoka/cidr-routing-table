@@ -23,6 +23,16 @@ impl Ipv4Cidr {
         }
     }
 
+    pub fn from_bits(bits: u32, len: u8) -> Result<Self, NetworkParseError> {
+        if len > MAX_LENGTH {
+            Err(NetworkParseError::NetworkLengthError)
+        } else {
+            let addr = Ipv4Addr::from(bits);
+
+            Ok(Self {addr, len })
+        }
+    }
+
     pub fn new_host(addr: Ipv4Addr) -> Self {
         Self {
             addr,
